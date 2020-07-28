@@ -1,42 +1,57 @@
 package com.ware.financakotlin.ui
 
-import android.graphics.Color
+import android.content.Context
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.ware.financakotlin.R
 import com.ware.financakotlin.extension.formatForCurrencyBrazil
 import com.ware.financakotlin.model.Resumo
 import com.ware.financakotlin.model.Transacao
 import kotlinx.android.synthetic.main.cardview_resumo.view.*
 import java.math.BigDecimal
 
-class ResumoView(private val view: View, transacoes: ArrayList<Transacao>) {
+class ResumoView(
+    private val context: Context,
+    private val view: View,
+    transacoes: ArrayList<Transacao>
+) {
 
     private val resumo: Resumo = Resumo(transacoes)
-    private fun corDespesa() = Color.RED
-    private fun corReceita() = Color.BLUE
+    private val corReceita = ContextCompat.getColor(context, R.color.colorReceita)
+    private val corDespesa = ContextCompat.getColor(context, R.color.colorDespesa)
+
+    fun adicionaDespesaReceitaTotal(){
+        adicionaReceita()
+        adicionaDespesa()
+        adicionaTotal()
+    }
 
     fun adicionaDespesa() {
         var total_despeza = resumo.despeza()
-        view.resumo_despesa.setTextColor(corDespesa())
+        view.resumo_despesa.setTextColor(corReceita)
         view.resumo_despesa.text = total_despeza.formatForCurrencyBrazil()
     }
-
-
     fun adicionaReceita() {
-        var total_receita = resumo.receita()
-        view.resumo_receita.setTextColor(corReceita())
-        view.resumo_receita.text = total_receita.formatForCurrencyBrazil()
-    }
+        var total_receita = resumo.receita
 
-    fun adicionaTotal(){
-        var total = resumo.total()
-        if(total >= BigDecimal.ZERO){
-            view.resumo_total.setTextColor(corReceita())
-        }else{
-            view.resumo_total.setTextColor(corDespesa())
+        with(view.resumo_receita) {
+            setTextColor(corReceita)
+            text = total_receita.formatForCurrencyBrazil()
         }
-        view.resumo_total.text = total.formatForCurrencyBrazil()
+    }
+    fun adicionaTotal() {
+        var total = resumo.total
+        var cor = corPor(total)
+        with(view.resumo_total){
+            setTextColor(cor)
+            text = total.formatForCurrencyBrazil()
+        }
     }
 
-
-
+    private fun corPor(valor: BigDecimal): Int {
+        if (valor >= BigDecimal.ZERO) {
+            return corReceita
+        }
+        return corDespesa
+    }
 }

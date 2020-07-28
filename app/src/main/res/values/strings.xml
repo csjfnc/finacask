@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">financakotlin</string>
+    <string name="adiciona_receita">Adicionar receita</string>
 </resources>

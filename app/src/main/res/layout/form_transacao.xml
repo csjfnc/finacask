@@ -15,6 +15,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/valor_transacao_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Categoria"/>
         <Spinner
+            android:id="@+id/categoria_transacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -15,7 +15,7 @@ import com.ware.financakotlin.model.Transacao
 import kotlinx.android.synthetic.main.transacoes_lista_recyclerview.view.*
 
 class ListaTransacoesAdapter(
-    private val transacoes: ArrayList<Transacao>,
+    private val transacoes: MutableList<Transacao>,
     private val context: Context
 ) : RecyclerView.Adapter<ListaTransacoesAdapter.ViewHolder>() {
 

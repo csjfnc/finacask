@@ -13,7 +13,7 @@ import java.math.BigDecimal
 class ResumoView(
     private val context: Context,
     private val view: View,
-    transacoes: ArrayList<Transacao>
+    transacoes: MutableList<Transacao>
 ) {
 
     private val resumo: Resumo = Resumo(transacoes)

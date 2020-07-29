@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categoria_de_receita">
+        <item>Receita indefinida</item>
+        <item>Economia</item>
+        <item>Emprestimo</item>
+        <item>Pagamento</item>
+        <item>Presente</item>
+        <item>Salario</item>
+        <item>Vendas</item>
+    </string-array>
+</resources>

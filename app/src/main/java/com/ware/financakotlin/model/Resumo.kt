@@ -2,7 +2,7 @@ package com.ware.financakotlin.model
 
 import java.math.BigDecimal
 
-class Resumo(private val transacoes: ArrayList<Transacao>){
+class Resumo(private val transacoes: MutableList<Transacao>){
 
     fun despeza(): BigDecimal {
 //        var total_despesa = BigDecimal.ZERO

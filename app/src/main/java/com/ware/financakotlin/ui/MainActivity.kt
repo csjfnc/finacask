@@ -1,31 +1,18 @@
 package com.ware.financakotlin.ui
 
-import android.app.DatePickerDialog
-import android.content.DialogInterface
-import android.nfc.FormatException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ware.financakotlin.R
 import com.ware.financakotlin.delegate.TransacaoDelegate
-import com.ware.financakotlin.extension.formatForBrazil
-import com.ware.financakotlin.extension.formatForCurrencyBrazil
 import com.ware.financakotlin.model.Tipo
 import com.ware.financakotlin.ui.adapter.ListaTransacoesAdapter
 import com.ware.financakotlin.model.Transacao
 import com.ware.financakotlin.ui.dialog.AdicionaTransacaoDialog
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.cardview_resumo.*
-import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -37,21 +24,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var generateList = generateList(17)
-
         configuraResumoView()
         configuraLista()
+        configuraFab()
+    }
 
-        adiciona_desposa_action.setOnClickListener {
-
-            AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
-                .configuraDialog(object : TransacaoDelegate {
-                    override fun delegate(trasacao: Transacao) {
-                        atualizaTransacoes(trasacao)
-                        floaction_menu_transacao.close(true)
-                    }
-                })
+    private fun configuraFab() {
+        adiciona_receita_action.setOnClickListener {
+            chamaDialogAdicao(Tipo.RECEITA)
         }
+
+        adiciona_despesa_action.setOnClickListener {
+            chamaDialogAdicao(Tipo.DESPESA)
+        }
+    }
+
+    private fun chamaDialogAdicao(tipo: Tipo) {
+        AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
+            .chama(tipo, object : TransacaoDelegate {
+                override fun delegate(trasacao: Transacao) {
+                    atualizaTransacoes(trasacao)
+                    floaction_menu_transacao.close(true)
+                }
+            })
     }
 
     private fun atualizaTransacoes(transacao: Transacao) {

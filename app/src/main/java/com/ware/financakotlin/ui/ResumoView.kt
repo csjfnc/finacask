@@ -28,7 +28,7 @@ class ResumoView(
 
     fun adicionaDespesa() {
         var total_despeza = resumo.despeza()
-        view.resumo_despesa.setTextColor(corReceita)
+        view.resumo_despesa.setTextColor(corDespesa)
         view.resumo_despesa.text = total_despeza.formatForCurrencyBrazil()
     }
     fun adicionaReceita() {

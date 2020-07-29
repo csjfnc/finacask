@@ -9,4 +9,13 @@
         <item>Salario</item>
         <item>Vendas</item>
     </string-array>
+    <string-array name="categoria_de_despesa">
+        <item>Despesa indefinida</item>
+        <item>Casa</item>
+        <item>Comida</item>
+        <item>Comunicações</item>
+        <item>Contas</item>
+        <item>Lazer</item>
+        <item>Roupas</item>
+    </string-array>
 </resources>

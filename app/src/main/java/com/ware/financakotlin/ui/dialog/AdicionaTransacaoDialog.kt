@@ -22,29 +22,35 @@ import java.util.*
 class AdicionaTransacaoDialog(private val context: Context, private val viewGroup: ViewGroup) {
 
     private val viewCreate = criaView()
+    private val campoData = viewCreate.data_form_transacao
+    private val campoCategoria = viewCreate.categoria_transacao
+    private val campoValor = viewCreate.valor_transacao_form
 
-    fun configuraDialog(transacaoDelegate: TransacaoDelegate) {
+    fun chama(tipo: Tipo, transacaoDelegate: TransacaoDelegate) {
         configuraCampoData()
-        configuraCampoCategoria()
-        configuraFormulario(transacaoDelegate)
+        configuraCampoCategoria(tipo)
+        configuraFormulario(tipo, transacaoDelegate)
     }
 
-    private fun configuraFormulario(transacaoDelegate: TransacaoDelegate) {
+    private fun configuraFormulario(tipo: Tipo, transacaoDelegate: TransacaoDelegate) {
+
+        val titulo = tituloPor(tipo)
+
         AlertDialog.Builder(context)
-            .setTitle(R.string.adiciona_receita)
+            .setTitle(titulo)
             .setView(viewCreate)
             .setPositiveButton("Salvar", DialogInterface.OnClickListener { _, _ ->
 
-                val valorText = viewCreate.valor_transacao_form.text.toString()
-                val datatext = viewCreate.data_form_transacao.text.toString()
-                val categoriaText = viewCreate.categoria_transacao.selectedItem.toString()
+                val valorText = campoValor.text.toString()
+                val datatext = campoData.text.toString()
+                val categoriaText = campoCategoria.selectedItem.toString()
 
                 val valor = converteCampoValor(valorText)
                 val data = datatext.converteParaCalendar()
 
                 val transacao = Transacao(
                     valor = valor,
-                    tipo = Tipo.RECEITA,
+                    tipo = tipo,
                     data = data,
                     categoria = categoriaText
                 )
@@ -52,6 +58,13 @@ class AdicionaTransacaoDialog(private val context: Context, private val viewGrou
             })
             .setNegativeButton("Cancelar", null)
             .show()
+    }
+
+    private fun tituloPor(tipo: Tipo): Int {
+        if (tipo == Tipo.RECEITA) {
+            return R.string.adiciona_receita
+        }
+        return R.string.adiciona_despesa
     }
 
 
@@ -63,13 +76,24 @@ class AdicionaTransacaoDialog(private val context: Context, private val viewGrou
         }
     }
 
-    private fun configuraCampoCategoria() {
+    private fun configuraCampoCategoria(tipo: Tipo) {
+
+        val categoria = categoriaPor(tipo)
+
         val adapter = ArrayAdapter.createFromResource(
             context,
-            R.array.categoria_de_receita,
+            categoria,
             android.R.layout.simple_spinner_dropdown_item
         )
-        viewCreate.categoria_transacao.adapter = adapter
+        campoCategoria.adapter = adapter
+    }
+
+    private fun categoriaPor(tipo: Tipo): Int {
+        return if (tipo == Tipo.DESPESA) {
+            R.array.categoria_de_despesa
+        } else {
+            R.array.categoria_de_receita
+        }
     }
 
     private fun configuraCampoData() {
@@ -78,12 +102,12 @@ class AdicionaTransacaoDialog(private val context: Context, private val viewGrou
         val mes = today.get(Calendar.MONTH)
         val dia = today.get(Calendar.DAY_OF_MONTH)
 
-        viewCreate.data_form_transacao.setText(today.formatForBrazil())
-        viewCreate.data_form_transacao.setOnClickListener {
+        campoData.setText(today.formatForBrazil())
+        campoData.setOnClickListener {
             DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _, ano, mes, dia ->
                 val dataSelect = Calendar.getInstance()
                 dataSelect.set(ano, mes, dia)
-                viewCreate.data_form_transacao.setText(dataSelect.formatForBrazil())
+                campoData.setText(dataSelect.formatForBrazil())
 
             }, ano, mes, dia)
                 .show()
@@ -92,7 +116,5 @@ class AdicionaTransacaoDialog(private val context: Context, private val viewGrou
 
     private fun criaView(): View {
         return LayoutInflater.from(context).inflate(R.layout.form_transacao, viewGroup, false)
-
     }
-
 }

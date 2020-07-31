@@ -12,11 +12,13 @@ import com.ware.financakotlin.extension.formatForCurrencyBrazil
 import com.ware.financakotlin.extension.limitString
 import com.ware.financakotlin.model.Tipo
 import com.ware.financakotlin.model.Transacao
+import com.ware.financakotlin.ui.`interface`.OnClickListener
 import kotlinx.android.synthetic.main.transacoes_lista_recyclerview.view.*
 
 class ListaTransacoesAdapter(
     private val transacoes: MutableList<Transacao>,
-    private val context: Context
+    private val context: Context,
+    private val onClickListener: OnClickListener
 ) : RecyclerView.Adapter<ListaTransacoesAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -69,6 +71,9 @@ class ListaTransacoesAdapter(
     override fun onBindViewHolder(holder: ListaTransacoesAdapter.ViewHolder, position: Int) {
         var transacao = transacoes[position]
         holder.vincula(transacao)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClickView(transacao, position)
+        }
     }
 
 }

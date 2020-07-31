@@ -2,4 +2,7 @@
     <string name="app_name">financakotlin</string>
     <string name="adiciona_receita">Adicionar receita</string>
     <string name="adiciona_despesa">Adicionar despesa</string>
+
+    <string name="altera_receita">Alterar receita</string>
+    <string name="altera_despesa">Altera despesa</string>
 </resources>

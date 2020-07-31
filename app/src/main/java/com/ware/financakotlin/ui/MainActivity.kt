@@ -10,12 +10,15 @@ import com.ware.financakotlin.delegate.TransacaoDelegate
 import com.ware.financakotlin.model.Tipo
 import com.ware.financakotlin.ui.adapter.ListaTransacoesAdapter
 import com.ware.financakotlin.model.Transacao
+import com.ware.financakotlin.ui.`interface`.OnClickListener
 import com.ware.financakotlin.ui.dialog.AdicionaTransacaoDialog
+import com.ware.financakotlin.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import java.math.BigDecimal
+import java.text.FieldPosition
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickListener {
 
     private val transacoesList: MutableList<Transacao> = mutableListOf()
 
@@ -43,14 +46,14 @@ class MainActivity : AppCompatActivity() {
         AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
             .chama(tipo, object : TransacaoDelegate {
                 override fun delegate(trasacao: Transacao) {
-                    atualizaTransacoes(trasacao)
+                    transacoesList.add(trasacao)
+                    atualizaTransacoes()
                     floaction_menu_transacao.close(true)
                 }
             })
     }
 
-    private fun atualizaTransacoes(transacao: Transacao) {
-        transacoesList.add(transacao)
+    private fun atualizaTransacoes() {
         configuraLista()
         configuraResumoView()
     }
@@ -63,9 +66,20 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun configuraLista() {
-        lista_transacoes_reciclerview.adapter = ListaTransacoesAdapter(transacoesList, this)
+        lista_transacoes_reciclerview.adapter = ListaTransacoesAdapter(transacoesList, this, this)
         lista_transacoes_reciclerview.layoutManager = LinearLayoutManager(this)
         lista_transacoes_reciclerview.setHasFixedSize(true)
+    }
+
+    override fun onClickView(transacao: Transacao, position: Int) {
+        AlteraTransacaoDialog(this, window.decorView as ViewGroup)
+            .chama(transacao, object : TransacaoDelegate{
+                override fun delegate(trasacao: Transacao) {
+                    transacoesList[position] = trasacao
+                    atualizaTransacoes()
+                }
+
+            })
     }
 
     fun generateList(size: Int): ArrayList<Transacao> {
@@ -84,4 +98,5 @@ class MainActivity : AppCompatActivity() {
         }
         return list
     }
+
 }
